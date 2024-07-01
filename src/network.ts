@@ -25,6 +25,16 @@ export class Network {
             autoReconnectMaxAttempts: 10,
             autoReconnectTimeout: 3000,
 
+            /**
+             * Optional configuration for the room.
+             * Learn more:
+             * https://docs.massiverealm.com/performance-tips/export-room-settings
+             *
+             * roomConfig: {
+             *    'room': RoomConfigObject
+             * }
+             */
+
             onConnect: () => {
                 console.log('Connected');
                 this.client.joinRoom({
@@ -63,7 +73,7 @@ export class Network {
             onCommand: (command, data) => {
                 console.log('Command received', command, data);
 
-                // Add a new player to the scene or move if existing
+                // Set current player id
                 if (command === 'MyInfo') {
                     this.playerId = data.id;
                 }
@@ -71,7 +81,7 @@ export class Network {
                 else if (command === 'DeletePlayer') {
                     this.level.events.emit('playerDelete', data.id);
                 }
-                // Add all players to the scene
+                // Update all players' positions
                 else if (command === 'UpdatePlayers') {
                     for (let i = 0; i < data.players.length; i++) {
                         // Skip the current player
